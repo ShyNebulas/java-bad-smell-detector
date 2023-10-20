@@ -8,7 +8,7 @@ import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 
 import java.util.concurrent.atomic.AtomicInteger;
 public class GetLength extends VoidVisitorAdapter<AtomicInteger> {
-    private static class ExpressionVisitor extends GenericVisitorAdapter<Statement, AtomicInteger> {
+    private static class StatementVisitor extends GenericVisitorAdapter<Statement, AtomicInteger> {
         public AssertStmt visit(AssertStmt statement, AtomicInteger count) {
             //System.out.println("[Assert]" + statement);
             count.addAndGet(1);
@@ -117,7 +117,7 @@ public class GetLength extends VoidVisitorAdapter<AtomicInteger> {
     }
     @Override
     public void visit(MethodDeclaration method, AtomicInteger collector) {
-        method.accept(new GetLength.ExpressionVisitor(), collector);
+        method.accept(new GetLength.StatementVisitor(), collector);
         super.visit(method, collector);
     }
 }
