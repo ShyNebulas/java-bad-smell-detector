@@ -9,6 +9,7 @@ import java.nio.file.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 //TODO: Add line numbers to bad smell errors
@@ -47,31 +48,32 @@ public class Main {
     }
 
     public static Integer getMethodLength(MethodDeclaration method) {
-        StringBuffer length = new StringBuffer();
-        VoidVisitor<StringBuffer> lengthVisitor = new Mefod.GetLength();
+        AtomicInteger length = new AtomicInteger(0);
+        VoidVisitor<AtomicInteger> lengthVisitor = new Mefod.GetLength();
         lengthVisitor.visit(method, length);
-        return Integer.valueOf(length.toString());
+        return length.get();
     }
     public static void main(String[] args) throws IOException {
         List<Path> paths = getDirectoryPaths(DIRECTORY_PATH);
         for (Path path : paths) {
             System.out.println(path);
 
-
             CompilationUnit compUnit = StaticJavaParser.parse(path);
 
             ArrayList<MethodDeclaration> methods = getClassMethods(compUnit);
 
             for(MethodDeclaration method : methods) {
-                String name = getMethodName(method);
+                System.out.println(method.getNameAsString());
+                //String name = getMethodName(method);
                 Integer length = getMethodLength(method);
-                NodeList<Parameter> parameters = getMethodParameters(method);
-                if(parameters.size() > 3) {
-                    System.out.println(MessageFormat.format("Method {0} has a long parameter list", name));
-                }
-                if(length > 10) {
-                    System.out.println(MessageFormat.format("Method {0} has a long method", name));
-                }
+                System.out.println(length);
+                //NodeList<Parameter> parameters = getMethodParameters(method);
+//                if(parameters.size() > 3) {
+//                    System.out.println(MessageFormat.format("Method {0} has a long parameter list", name));
+//                }
+//                if(length > 10) {
+//                    System.out.println(MessageFormat.format("Method {0} has a long method", name));
+//                }
             }
 
             System.out.println("======================================");
