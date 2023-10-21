@@ -8,5 +8,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="github.javaparser.symbol.solver.core" level="project" />
+    <orderEntry type="library" name="javaparser-core-3.25.5" level="project" />
   </component>
 </module>
