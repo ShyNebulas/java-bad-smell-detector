@@ -7,7 +7,6 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class GetFields {
     private static class GetFieldsVisitor extends VoidVisitorAdapter<List<FieldDeclaration>> {
         @Override
