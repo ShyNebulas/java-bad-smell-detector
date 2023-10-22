@@ -60,7 +60,7 @@ public class Main {
     private static void detectMessageChains(MethodDeclaration method) {
             method.walk(MethodCallExpr.class, mc -> {
                 if (mc.getScope().isPresent() && mc.getScope().get().isMethodCallExpr()) {
-                    System.out.println("Message chain detected in method '" + method.getNameAsString() + "': " + mc);
+                    System.out.println("Message chain detected in method '" + getMethodName(method) + "': " + mc);
                 }
             });
     }
@@ -92,7 +92,9 @@ public class Main {
 
             for(MethodDeclaration method : methods) {
 
+                // Message Chains
                 detectMessageChains(method);
+
                 String name = getMethodName(method);
                 Integer length = getMethodLength(method);
                 NodeList<Parameter> parameters = getMethodParameters(method);
