@@ -13,25 +13,72 @@ public class Main {
         List<Path> paths = Directory.getFilePaths(DIRECTORY_PATH);
         for (Path path : paths) {
             System.out.println(path);
+
+            boolean dataClass = false;
+            boolean lock = false;
+
             CompilationUnit compUnit = StaticJavaParser.parse(path);
 
-            String class_name = Klass.GetName.getValue(compUnit);
-            int class_length = Klass.GetLength.getValue(compUnit);
-            if(class_length > 20) {
-                System.out.println("[Long Class] " + class_name);
-            }
-            ArrayList<MethodDeclaration> methods = Klass.GetMethods.getValues(compUnit);
+            List<Class<?>> klasss = getKlasss(compUnit);
+            ArrayList<MethodDeclaration> methods = getClassMethods(compUnit);
+            ArrayList<FieldDeclaration> fields = getClassFields(compUnit);
+
             for(MethodDeclaration method : methods) {
-                String method_name = Mefod.GetName.getValue(method);
-                int method_length = Mefod.GetLength.getValue(method);
-                NodeList<Parameter> method_parameters = Mefod.GetParameters.getValues(method);
-                if(method_parameters.size() > 5) {
-                    System.out.println("[Long Parameter List] " + method_name);
+                String name = getMethodName(method);
+                Integer length = getMethodLength(method);
+                NodeList<Parameter> parameters = getMethodParameters(method);
+                if(parameters.size() > 5) {
+                    System.out.println(MessageFormat.format("Method {0} has a long parameter list", name));
                 }
-                if(method_length > 20) {
-                    System.out.println("[Long Method] " + method_name);
+                if(length > 20) {
+                    System.out.println(MessageFormat.format("Method {0} is a long method", name));
                 }
             }
+//data class Detector\/
+//            for(Class<?> klass : klasss) {
+                for (MethodDeclaration method : methods) {
+                    boolean getter = false;
+                    if (method.getModifiers().toString().equals("[public ]") && getMethodParameters(method).size() == 0) {
+                        if ((getMethodName(method).matches("^get[A-Z].*") && !method.getType().toString().equals("void")) ||
+                                (getMethodName(method).matches("^is[A-Z].*") && method.getType().toString().equals("boolean"))) {
+                            dataClass = true;
+                            getter = true;
+                        }
+                    }
+                    if (method.getModifiers().toString().equals("[public ]") && getMethodParameters(method).size() == 1) {
+                        if (getMethodName(method).matches("^set[A-Z].*") && method.getType().toString().equals("void")) {
+                            dataClass = true;
+                        }
+                    } else if (!getter) {
+                        lock = true;
+                    }
+                }
+                if (dataClass && !lock) {
+                    System.out.println("This is a data class.");
+                }
+//            }
+//data class Detector/\
+//temporary field Detector\/
+            for(FieldDeclaration field : fields) {
+                for(VariableDeclarator variable : field.getVariables()) {
+                    if (variable.getInitializer().isEmpty()) {
+                        String fieldName = variable.getNameAsString();
+                        int temp = 0;
+                        for (MethodDeclaration method : compUnit.findAll(MethodDeclaration.class)) {
+                            if (method.toString().contains(fieldName)) {
+                                temp += 1;
+                            }
+                        }
+                        if (temp == 1) {
+                            System.out.println(fieldName + " may be a temporary field.");
+                        }
+                    }
+                }
+            }
+//temporary field Detector/\
+
+
+
             System.out.println("======================================");
         }
     }
