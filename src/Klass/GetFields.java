@@ -1,6 +1,5 @@
 package Klass;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -17,7 +16,7 @@ public class GetFields {
             collector.addAll(klass.getFields());
         }
     }
-    public static List<FieldDeclaration> getValues(CompilationUnit klass) {
+    public static List<FieldDeclaration> getValues(ClassOrInterfaceDeclaration klass) {
         List<FieldDeclaration> fields = new ArrayList<>();
         VoidVisitor<List<FieldDeclaration>> fieldsVisitor = new GetFieldsVisitor();
         fieldsVisitor.visit(klass, fields);

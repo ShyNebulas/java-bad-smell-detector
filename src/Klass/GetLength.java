@@ -1,6 +1,5 @@
 package Klass;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.visitor.GenericVisitorAdapter;
 import com.github.javaparser.ast.visitor.VoidVisitor;
@@ -74,7 +73,7 @@ public class GetLength {
             super.visit(klass, collector);
         }
     }
-    public static int getValue(CompilationUnit compUnit) {
+    public static int getValue(ClassOrInterfaceDeclaration compUnit) {
         AtomicInteger length = new AtomicInteger(0);
         VoidVisitor<AtomicInteger> lengthVisitor = new GetLengthVisitor();
         lengthVisitor.visit(compUnit, length);

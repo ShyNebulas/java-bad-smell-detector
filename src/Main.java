@@ -1,15 +1,9 @@
-import Klass.GetChildren;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.*;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.body.*;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.ArrayList;
 import java.util.List;
 public class Main {
     private static final Path DIRECTORY_PATH = Paths.get("data/src");
@@ -20,26 +14,28 @@ public class Main {
 
             CompilationUnit compUnit = StaticJavaParser.parse(path);
 
-
-
-            List<ClassOrInterfaceDeclaration> class_children = Klass.GetChildren.getValues(compUnit);
-
-
-
+            List<ClassOrInterfaceDeclaration> class_children = compUnit.findAll(ClassOrInterfaceDeclaration.class);
             for(ClassOrInterfaceDeclaration class_child : class_children) {
-
                 String class_name = Klass.GetName.getValue(class_child);
+                System.out.println("Class name: " + class_name);
+                int class_length = Klass.GetLength.getValue(class_child);
                 List<MethodDeclaration> class_methods = Klass.GetMethods.getValues(class_child);
                 boolean class_is_data = Klass.IsData.getValue(class_methods);
+                // Large Class
+                if(class_length > 100) {
+                    System.out.println("[Large Class] " + class_name);
+                }
                 // Data Class
                 if(class_is_data) {
                     System.out.println("[Data Class] " + class_name);
                 }
                 // Temporary Fields
-                List<FieldDeclaration> class_fields = Klass.GetFields.getValues(compUnit);
+                List<FieldDeclaration> class_fields = Klass.GetFields.getValues(class_child);
                 for(FieldDeclaration field : class_fields) {
-                    if(Klass.IsTempField.getValue(field, class_methods)) {
-                        System.out.println("[Temp Field] " + field);
+                    for(VariableDeclarator field_variable : field.getVariables()) {
+                        if(Klass.IsTempField.getValue(field_variable, class_methods)) {
+                            System.out.println("[Temp Field] " + field_variable.getNameAsString());
+                        }
                     }
                 }
                 // Long Parameter List & Long Method
@@ -55,13 +51,6 @@ public class Main {
                     }
                 }
             }
-
-
-
-
-
-
-
 
 
             System.out.println("======================================");
