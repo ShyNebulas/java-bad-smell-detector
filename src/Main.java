@@ -24,7 +24,10 @@ public class Main {
             for(MethodDeclaration method : methods) {
                 String method_name = Mefod.GetName.getValue(method);
                 int method_length = Mefod.GetLength.getValue(method);
-                NodeList<Parameter> parameters = Mefod.GetParameters.getValues(method);
+                NodeList<Parameter> method_parameters = Mefod.GetParameters.getValues(method);
+                if(method_parameters.size() > 5) {
+                    System.out.println("[Long Parameter List] " + method_name);
+                }
                 if(method_length > 20) {
                     System.out.println("[Long Method] " + method_name);
                 }
