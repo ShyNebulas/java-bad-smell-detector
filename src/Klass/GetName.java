@@ -1,6 +1,5 @@
 package Klass;
 
-import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -12,10 +11,10 @@ public class GetName {
             collector.append(klass.getNameAsString());
         }
     }
-    public static String getValue(CompilationUnit compUnit) {
+    public static String getValue(ClassOrInterfaceDeclaration klass) {
         StringBuffer name = new StringBuffer();
         VoidVisitor<StringBuffer> nameVisitor = new GetNameVisitor();
-        nameVisitor.visit(compUnit, name);
+        nameVisitor.visit(klass, name);
         return name.toString();
     }
 }

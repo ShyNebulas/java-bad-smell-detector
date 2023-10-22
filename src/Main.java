@@ -1,7 +1,11 @@
+import Klass.GetChildren;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.*;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.type.ClassOrInterfaceType;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -14,68 +18,49 @@ public class Main {
         for (Path path : paths) {
             System.out.println(path);
 
-            boolean dataClass = false;
-            boolean lock = false;
-
             CompilationUnit compUnit = StaticJavaParser.parse(path);
 
-            List<Class<?>> klasss = getKlasss(compUnit);
-            ArrayList<MethodDeclaration> methods = getClassMethods(compUnit);
-            ArrayList<FieldDeclaration> fields = getClassFields(compUnit);
 
-            for(MethodDeclaration method : methods) {
-                String name = getMethodName(method);
-                Integer length = getMethodLength(method);
-                NodeList<Parameter> parameters = getMethodParameters(method);
-                if(parameters.size() > 5) {
-                    System.out.println(MessageFormat.format("Method {0} has a long parameter list", name));
+
+            List<ClassOrInterfaceDeclaration> class_children = Klass.GetChildren.getValues(compUnit);
+
+
+
+            for(ClassOrInterfaceDeclaration class_child : class_children) {
+
+                String class_name = Klass.GetName.getValue(class_child);
+                List<MethodDeclaration> class_methods = Klass.GetMethods.getValues(class_child);
+                boolean class_is_data = Klass.IsData.getValue(class_methods);
+                // Data Class
+                if(class_is_data) {
+                    System.out.println("[Data Class] " + class_name);
                 }
-                if(length > 20) {
-                    System.out.println(MessageFormat.format("Method {0} is a long method", name));
-                }
-            }
-//data class Detector\/
-//            for(Class<?> klass : klasss) {
-                for (MethodDeclaration method : methods) {
-                    boolean getter = false;
-                    if (method.getModifiers().toString().equals("[public ]") && getMethodParameters(method).size() == 0) {
-                        if ((getMethodName(method).matches("^get[A-Z].*") && !method.getType().toString().equals("void")) ||
-                                (getMethodName(method).matches("^is[A-Z].*") && method.getType().toString().equals("boolean"))) {
-                            dataClass = true;
-                            getter = true;
-                        }
-                    }
-                    if (method.getModifiers().toString().equals("[public ]") && getMethodParameters(method).size() == 1) {
-                        if (getMethodName(method).matches("^set[A-Z].*") && method.getType().toString().equals("void")) {
-                            dataClass = true;
-                        }
-                    } else if (!getter) {
-                        lock = true;
+                // Temporary Fields
+                List<FieldDeclaration> class_fields = Klass.GetFields.getValues(compUnit);
+                for(FieldDeclaration field : class_fields) {
+                    if(Klass.IsTempField.getValue(field, class_methods)) {
+                        System.out.println("[Temp Field] " + field);
                     }
                 }
-                if (dataClass && !lock) {
-                    System.out.println("This is a data class.");
-                }
-//            }
-//data class Detector/\
-//temporary field Detector\/
-            for(FieldDeclaration field : fields) {
-                for(VariableDeclarator variable : field.getVariables()) {
-                    if (variable.getInitializer().isEmpty()) {
-                        String fieldName = variable.getNameAsString();
-                        int temp = 0;
-                        for (MethodDeclaration method : compUnit.findAll(MethodDeclaration.class)) {
-                            if (method.toString().contains(fieldName)) {
-                                temp += 1;
-                            }
-                        }
-                        if (temp == 1) {
-                            System.out.println(fieldName + " may be a temporary field.");
-                        }
+                // Long Parameter List & Long Method
+                for(MethodDeclaration method : class_methods) {
+                    String method_name = Mefod.GetName.getValue(method);
+                    NodeList<Parameter> method_parameters = Mefod.GetParameters.getValues(method);
+                    int method_length = Mefod.GetLength.getValue(method);
+                    if(method_parameters.size() > 5) {
+                        System.out.println("[Long Parameter List] " + method_name);
+                    }
+                    if(method_length > 20) {
+                        System.out.println("[Long Method] " + method_name);
                     }
                 }
             }
-//temporary field Detector/\
+
+
+
+
+
+
 
 
 

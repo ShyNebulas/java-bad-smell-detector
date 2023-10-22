@@ -17,10 +17,10 @@ public class GetMethods extends VoidVisitorAdapter<List<MethodDeclaration>> {
             collector.addAll(klass.getMethods());
         }
     }
-    public static ArrayList<MethodDeclaration> getValues(CompilationUnit compUnit) {
-        ArrayList<MethodDeclaration> methods = new ArrayList<>();
+    public static List<MethodDeclaration> getValues(ClassOrInterfaceDeclaration klass) {
+        List<MethodDeclaration> methods = new ArrayList<>();
         VoidVisitor<List<MethodDeclaration>> methodsVisitor = new GetMethodsVisitor();
-        methodsVisitor.visit(compUnit, methods);
+        methodsVisitor.visit(klass, methods);
         return methods;
     }
 }

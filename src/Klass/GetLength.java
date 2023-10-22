@@ -70,7 +70,7 @@ public class GetLength {
         }
         @Override
         public void visit(ClassOrInterfaceDeclaration klass, AtomicInteger collector) {
-            klass.accept(new GetLengthVisitor.ClassVisitor(), collector);
+            klass.accept(new ClassVisitor(), collector);
             super.visit(klass, collector);
         }
     }

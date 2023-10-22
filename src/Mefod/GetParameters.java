@@ -5,7 +5,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 public class GetParameters {
     private static class GetParametersVisitor extends VoidVisitorAdapter<NodeList<Parameter>> {
         @Override
