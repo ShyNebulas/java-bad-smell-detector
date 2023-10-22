@@ -14,13 +14,19 @@ public class Main {
         for (Path path : paths) {
             System.out.println(path);
             CompilationUnit compUnit = StaticJavaParser.parse(path);
+
+            String class_name = Klass.GetName.getValue(compUnit);
+            int class_length = Klass.GetLength.getValue(compUnit);
+            if(class_length > 20) {
+                System.out.println("[Long Class] " + class_name);
+            }
             ArrayList<MethodDeclaration> methods = Klass.GetMethods.getValues(compUnit);
             for(MethodDeclaration method : methods) {
-                String name = Mefod.GetName.getValue(method);
-                int length = Mefod.GetLength.getValue(method);
+                String method_name = Mefod.GetName.getValue(method);
+                int method_length = Mefod.GetLength.getValue(method);
                 NodeList<Parameter> parameters = Mefod.GetParameters.getValues(method);
-                if(length > 20) {
-                    System.out.println("[Long Method] " + name);
+                if(method_length > 20) {
+                    System.out.println("[Long Method] " + method_name);
                 }
             }
             System.out.println("======================================");

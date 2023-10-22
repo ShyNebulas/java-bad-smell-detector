@@ -11,110 +11,110 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class GetLength {
     private static class GetLengthVisitor extends VoidVisitorAdapter<AtomicInteger> {
         private static class StatementVisitor extends GenericVisitorAdapter<Statement, AtomicInteger> {
-            public AssertStmt visit(AssertStmt statement, AtomicInteger count) {
+            public AssertStmt visit(AssertStmt statement, AtomicInteger collector) {
                 //System.out.println("[Assert]" + statement);
-                count.addAndGet(1);
-                return (AssertStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (AssertStmt) super.visit(statement, collector);
             }
-            public BreakStmt visit(BreakStmt statement, AtomicInteger count) {
+            public BreakStmt visit(BreakStmt statement, AtomicInteger collector) {
                 //System.out.println("[Break]" + statement);
-                count.addAndGet(1);
-                return (BreakStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (BreakStmt) super.visit(statement, collector);
             }
-            public ContinueStmt visit(ContinueStmt statement, AtomicInteger count) {
+            public ContinueStmt visit(ContinueStmt statement, AtomicInteger collector) {
                 //System.out.println("[Continue]" + statement);
-                count.addAndGet(1);
-                return (ContinueStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (ContinueStmt) super.visit(statement, collector);
             }
-            public DoStmt visit(DoStmt statement, AtomicInteger count) {
+            public DoStmt visit(DoStmt statement, AtomicInteger collector) {
                 //System.out.println("[Do]" + statement);
-                count.addAndGet(1);
-                return (DoStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (DoStmt) super.visit(statement, collector);
             }
             // Call to super() or this()
-            public ExplicitConstructorInvocationStmt visit(ExplicitConstructorInvocationStmt statement, AtomicInteger count) {
+            public ExplicitConstructorInvocationStmt visit(ExplicitConstructorInvocationStmt statement, AtomicInteger collector) {
                 //System.out.println("[ExplicitConstructorInvocation]" + statement);
-                count.addAndGet(1);
-                return (ExplicitConstructorInvocationStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (ExplicitConstructorInvocationStmt) super.visit(statement, collector);
             }
-            public ExpressionStmt visit(ExpressionStmt statement, AtomicInteger count) {
+            public ExpressionStmt visit(ExpressionStmt statement, AtomicInteger collector) {
                 //System.out.println("[Expression]" + statement);
-                count.addAndGet(1);
-                return (ExpressionStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (ExpressionStmt) super.visit(statement, collector);
             }
-            public ForEachStmt visit(ForEachStmt statement, AtomicInteger count) {
+            public ForEachStmt visit(ForEachStmt statement, AtomicInteger collector) {
                 //System.out.println("[ForEach]" + statement);
-                count.addAndGet(1);
-                return (ForEachStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (ForEachStmt) super.visit(statement, collector);
             }
-            public ForStmt visit(ForStmt statement, AtomicInteger count) {
+            public ForStmt visit(ForStmt statement, AtomicInteger collector) {
                 //System.out.println("[For]" + statement);
-                count.addAndGet(1);
-                return (ForStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (ForStmt) super.visit(statement, collector);
             }
-            public IfStmt visit(IfStmt statement, AtomicInteger count) {
+            public IfStmt visit(IfStmt statement, AtomicInteger collector) {
                 //System.out.println("[If]" + statement);
                 if (statement.getElseStmt().isPresent()) {
-                    count.addAndGet(1);
+                    collector.addAndGet(1);
                 }
-                count.addAndGet(1);
-                return (IfStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (IfStmt) super.visit(statement, collector);
             }
-            public LabeledStmt visit(LabeledStmt statement, AtomicInteger count) {
+            public LabeledStmt visit(LabeledStmt statement, AtomicInteger collector) {
                 //System.out.println("[Labeled]" + statement);
-                count.addAndGet(1);
-                return (LabeledStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (LabeledStmt) super.visit(statement, collector);
             }
-            public LocalClassDeclarationStmt visit(LocalClassDeclarationStmt statement, AtomicInteger count) {
+            public LocalClassDeclarationStmt visit(LocalClassDeclarationStmt statement, AtomicInteger collector) {
                 //System.out.println("[LocalClassDeclaration]" + statement);
-                count.addAndGet(1);
-                return (LocalClassDeclarationStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (LocalClassDeclarationStmt) super.visit(statement, collector);
             }
-            public LocalRecordDeclarationStmt visit(LocalRecordDeclarationStmt statement, AtomicInteger count) {
+            public LocalRecordDeclarationStmt visit(LocalRecordDeclarationStmt statement, AtomicInteger collector) {
                 //System.out.println("[LocalRecordDeclaration]" + statement);
-                count.addAndGet(1);
-                return (LocalRecordDeclarationStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (LocalRecordDeclarationStmt) super.visit(statement, collector);
             }
-            public ReturnStmt visit(ReturnStmt statement, AtomicInteger count) {
+            public ReturnStmt visit(ReturnStmt statement, AtomicInteger collector) {
                 //System.out.println("[Return]" + statement);
-                count.addAndGet(1);
-                return (ReturnStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (ReturnStmt) super.visit(statement, collector);
             }
-            public SwitchStmt visit(SwitchStmt statement, AtomicInteger count) {
+            public SwitchStmt visit(SwitchStmt statement, AtomicInteger collector) {
                 //System.out.println("[Switch]" + statement);
                 NodeList<SwitchEntry> entries = statement.getEntries();
                 if (!entries.isEmpty()) {
-                    count.addAndGet(1);
+                    collector.addAndGet(1);
                 }
-                count.addAndGet(1);
-                return (SwitchStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (SwitchStmt) super.visit(statement, collector);
             }
-            public SynchronizedStmt visit(SynchronizedStmt statement, AtomicInteger count) {
+            public SynchronizedStmt visit(SynchronizedStmt statement, AtomicInteger collector) {
                 //System.out.println("[Synchronized]" + statement);
-                count.addAndGet(1);
-                return (SynchronizedStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (SynchronizedStmt) super.visit(statement, collector);
             }
-            public ThrowStmt visit(ThrowStmt statement, AtomicInteger count) {
+            public ThrowStmt visit(ThrowStmt statement, AtomicInteger collector) {
                 //System.out.println("[Throw]" + statement);
-                count.addAndGet(1);
-                return (ThrowStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (ThrowStmt) super.visit(statement, collector);
             }
-            public TryStmt visit(TryStmt statement, AtomicInteger count) {
+            public TryStmt visit(TryStmt statement, AtomicInteger collector) {
                 //System.out.println("[Try]" + statement);
                 NodeList<CatchClause> clauses = statement.getCatchClauses();
                 if (!clauses.isEmpty()) {
-                    count.addAndGet(1);
+                    collector.addAndGet(1);
                 }
                 if (statement.getFinallyBlock().isPresent()) {
-                    count.addAndGet(1);
+                    collector.addAndGet(1);
                 }
-                count.addAndGet(1);
-                return (TryStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (TryStmt) super.visit(statement, collector);
             }
-            public WhileStmt visit(WhileStmt statement, AtomicInteger count) {
+            public WhileStmt visit(WhileStmt statement, AtomicInteger collector) {
                 //System.out.println("[While]" + statement);
-                count.addAndGet(1);
-                return (WhileStmt) super.visit(statement, count);
+                collector.addAndGet(1);
+                return (WhileStmt) super.visit(statement, collector);
             }
         }
         @Override
