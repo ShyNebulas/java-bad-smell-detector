@@ -3,12 +3,9 @@ import com.github.javaparser.ast.*;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.visitor.VoidVisitor;
-
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.MethodCallExpr;
-
-import java.util.HashSet;
-import java.util.Set;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
 
 import java.io.IOException;
@@ -16,7 +13,6 @@ import java.nio.file.*;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 //TODO: Add line numbers to bad smell errors
@@ -62,15 +58,22 @@ public class Main {
     }
 
     private static void detectMessageChains(MethodDeclaration method) {
-        Set<MethodDeclaration> completedMethods = new HashSet<>();
-
-        if (!completedMethods.contains(method)) {
             method.walk(MethodCallExpr.class, mc -> {
                 if (mc.getScope().isPresent() && mc.getScope().get().isMethodCallExpr()) {
                     System.out.println("Message chain detected in method '" + method.getNameAsString() + "': " + mc);
                 }
             });
-            completedMethods.add(method);
+    }
+
+    // Method used for detecting refusedBequest
+    private static boolean inheritsMethod(ClassOrInterfaceDeclaration classDeclaration) {
+        return classDeclaration.getExtendedTypes().stream().anyMatch(type -> type.getNameAsString().equals(classDeclaration.getExtendedTypes(0).getNameAsString()));
+    }
+    private static void detectRefusedBequest(ClassOrInterfaceDeclaration classDeclaration) {
+        for (MethodDeclaration method : classDeclaration.getMethods()) {
+            if (inheritsMethod(classDeclaration)) {
+                System.out.println("Refused Bequest detected in class '" + classDeclaration.getNameAsString() + "': Method '" + getMethodName(method) + "' is overridden.");
+            }
         }
     }
 
@@ -84,10 +87,12 @@ public class Main {
 
             ArrayList<MethodDeclaration> methods = getClassMethods(compUnit);
 
+            // Refused Bequest
+            compUnit.findAll(ClassOrInterfaceDeclaration.class).forEach(Main::detectRefusedBequest);
+
             for(MethodDeclaration method : methods) {
 
                 detectMessageChains(method);
-
                 String name = getMethodName(method);
                 Integer length = getMethodLength(method);
                 NodeList<Parameter> parameters = getMethodParameters(method);
