@@ -73,10 +73,10 @@ public class GetLength {
             super.visit(klass, collector);
         }
     }
-    public static int getValue(ClassOrInterfaceDeclaration compUnit) {
+    public static int getValue(ClassOrInterfaceDeclaration klass) {
         AtomicInteger length = new AtomicInteger(0);
         VoidVisitor<AtomicInteger> lengthVisitor = new GetLengthVisitor();
-        lengthVisitor.visit(compUnit, length);
+        lengthVisitor.visit(klass, length);
         return length.get();
     }
 }

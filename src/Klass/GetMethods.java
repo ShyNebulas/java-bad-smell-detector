@@ -12,7 +12,6 @@ public class GetMethods extends VoidVisitorAdapter<List<MethodDeclaration>> {
         @Override
         public void visit(ClassOrInterfaceDeclaration klass, List<MethodDeclaration> collector) {
             super.visit(klass, collector);
-            collector.clear();
             collector.addAll(klass.getMethods());
         }
     }

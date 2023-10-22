@@ -21,6 +21,7 @@ public class Main {
                 int class_length = Klass.GetLength.getValue(class_child);
                 List<MethodDeclaration> class_methods = Klass.GetMethods.getValues(class_child);
                 boolean class_is_data = Klass.IsData.getValue(class_methods);
+                boolean class_is_refused_bequest = Klass.IsRefusedBequest.getValue(class_child);
                 // Large Class
                 if(class_length > 100) {
                     System.out.println("[Large Class] " + class_name);
@@ -28,6 +29,10 @@ public class Main {
                 // Data Class
                 if(class_is_data) {
                     System.out.println("[Data Class] " + class_name);
+                }
+                // Refused Bequest
+                if(class_is_refused_bequest) {
+                    System.out.println("[Refused Bequest] " + class_name);
                 }
                 // Temporary Fields
                 List<FieldDeclaration> class_fields = Klass.GetFields.getValues(class_child);
@@ -39,20 +44,23 @@ public class Main {
                     }
                 }
                 // Long Parameter List & Long Method
-                for(MethodDeclaration method : class_methods) {
-                    String method_name = Mefod.GetName.getValue(method);
-                    NodeList<Parameter> method_parameters = Mefod.GetParameters.getValues(method);
-                    int method_length = Mefod.GetLength.getValue(method);
+                for(MethodDeclaration class_method : class_methods) {
+                    String method_name = Mefod.GetName.getValue(class_method);
+                    NodeList<Parameter> method_parameters = Mefod.GetParameters.getValues(class_method);
+                    int method_length = Mefod.GetLength.getValue(class_method);
+                    boolean method_chain = Mefod.IsMessageChain.getValue(class_method);
+
                     if(method_parameters.size() > 5) {
                         System.out.println("[Long Parameter List] " + method_name);
                     }
                     if(method_length > 20) {
                         System.out.println("[Long Method] " + method_name);
                     }
+                    if(method_chain) {
+                        System.out.println("[Message Chain] " + method_name);
+                    }
                 }
             }
-
-
             System.out.println("======================================");
         }
     }

@@ -4,7 +4,6 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.VariableDeclarator;
 
 import java.util.List;
-
 public class IsTempField {
     public static boolean getValue(VariableDeclarator variable, List<MethodDeclaration> methods) {
         int count = 0;
