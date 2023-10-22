@@ -10,7 +10,6 @@ public class GetFields extends VoidVisitorAdapter<List<FieldDeclaration>> {
     @Override
     public void visit(ClassOrInterfaceDeclaration klass, List<FieldDeclaration> collector) {
         super.visit(klass, collector);
-        collector.clear();
         collector.addAll(klass.getFields());
     }
 }
