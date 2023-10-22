@@ -1,20 +1,20 @@
-package Mefod;
+package Klass;
 
-import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitor;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 public class GetName {
     private static class GetNameVisitor extends VoidVisitorAdapter<StringBuffer> {
         @Override
-        public void visit(MethodDeclaration method, StringBuffer collector) {
-            super.visit(method, collector);
-            collector.append(method.getNameAsString());
+        public void visit(ClassOrInterfaceDeclaration klass, StringBuffer collector) {
+            super.visit(klass, collector);
+            collector.append(klass.getNameAsString());
         }
     }
-    public static String getValue(MethodDeclaration method) {
+    public static String getValue(ClassOrInterfaceDeclaration klass) {
         StringBuffer name = new StringBuffer();
         VoidVisitor<StringBuffer> nameVisitor = new GetNameVisitor();
-        nameVisitor.visit(method, name);
+        nameVisitor.visit(klass, name);
         return name.toString();
     }
 }
