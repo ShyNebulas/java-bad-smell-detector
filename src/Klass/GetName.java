@@ -8,6 +8,7 @@ public class GetName {
         @Override
         public void visit(ClassOrInterfaceDeclaration klass, StringBuffer collector) {
             super.visit(klass, collector);
+            collector.setLength(0);
             collector.append(klass.getNameAsString());
         }
     }
